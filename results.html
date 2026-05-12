@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Results{% endblock %}
+{% block content %}
+<section class="section-heading">
+    <div>
+        <p class="eyebrow">Marks and Results</p>
+        <h1>Results</h1>
+    </div>
+    {% if session.get('role') in ['instructor', 'admin'] %}
+        <a class="button" href="{{ url_for('add_marks') }}">Add Marks</a>
+    {% endif %}
+</section>
+
+<section class="table-panel">
+    <table>
+        <thead>
+            <tr>
+                <th>Course</th>
+                {% if session.get('role') != 'student' %}<th>Student</th>{% endif %}
+                <th>Marks</th>
+                <th>Total</th>
+                <th>Percentage</th>
+                <th>Remarks</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mark in marks %}
+                <tr>
+                    <td>{{ mark.course_title }}</td>
+                    {% if session.get('role') != 'student' %}<td>{{ mark.student_name }}</td>{% endif %}
+                    <td>{{ mark.marks }}</td>
+                    <td>{{ mark.total_marks }}</td>
+                    <td>{{ "%.2f"|format((mark.marks / mark.total_marks) * 100) }}%</td>
+                    <td>{{ mark.remarks or "-" }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="6">No marks available yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}
