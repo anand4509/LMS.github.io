@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Courses{% endblock %}
+{% block content %}
+<section class="section-heading">
+    <div>
+        <p class="eyebrow">Welcome, {{ session.get('name') }}</p>
+        <h1>{{ "Select Courses" if session.get('role') == "student" else "Courses" }}</h1>
+    </div>
+    {% if session.get('role') in ['instructor', 'admin'] %}
+        <div class="actions compact">
+            <a class="button" href="{{ url_for('add_course') }}">Add Course</a>
+            <a class="button secondary" href="{{ url_for('add_note') }}">Add Notes</a>
+        </div>
+    {% endif %}
+</section>
+
+<section class="grid">
+    {% for course in courses %}
+        <article class="card">
+            <h2>{{ course.title }}</h2>
+            <p>{{ course.description or "No description added yet." }}</p>
+            <span>Instructor: {{ course.instructor_name or "Not assigned" }}</span>
+            {% if session.get('role') == 'student' %}
+                {% if course.is_selected %}
+                    <form method="post" action="{{ url_for('remove_course', course_id=course.id) }}" class="inline-form">
+                        <button type="submit" class="button secondary">Remove Course</button>
+                    </form>
+                {% else %}
+                    <form method="post" action="{{ url_for('select_course', course_id=course.id) }}" class="inline-form">
+                        <button type="submit">Select Course</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </article>
+    {% else %}
+        <div class="empty-state">No courses have been added yet.</div>
+    {% endfor %}
+</section>
+
+<section class="table-panel">
+    <div class="section-heading flush">
+        <div>
+            <p class="eyebrow">Module Notes</p>
+            <h2>Latest Notes</h2>
+        </div>
+        <a class="button secondary" href="{{ url_for('notes') }}">View All</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Course</th>
+                <th>Module</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for note in notes %}
+                <tr>
+                    <td>{{ note.course_title }}</td>
+                    <td>{{ note.module_title }}</td>
+                    <td>{{ note.created_at }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="3">No module notes available yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}
