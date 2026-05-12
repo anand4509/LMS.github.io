@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Add Course{% endblock %}
+{% block content %}
+<section class="panel">
+    <h1>Add Course</h1>
+    <form method="post" class="form">
+        <label for="title">Course title</label>
+        <input id="title" name="title" type="text" required>
+
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="5"></textarea>
+
+        <button type="submit">Save Course</button>
+    </form>
+</section>
+{% endblock %}
