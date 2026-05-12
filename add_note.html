@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Add Module Notes{% endblock %}
+{% block content %}
+<section class="panel">
+    <h1>Add Module Notes</h1>
+    <form method="post" class="form">
+        <label for="course_id">Course</label>
+        <select id="course_id" name="course_id" required>
+            <option value="">Select course</option>
+            {% for course in courses %}
+                <option value="{{ course.id }}">{{ course.title }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="module_title">Module title</label>
+        <input id="module_title" name="module_title" type="text" required>
+
+        <label for="content">Notes</label>
+        <textarea id="content" name="content" rows="8" required></textarea>
+
+        <button type="submit">Save Notes</button>
+    </form>
+</section>
+{% endblock %}
