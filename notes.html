@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Module Notes{% endblock %}
+{% block content %}
+<section class="section-heading">
+    <div>
+        <p class="eyebrow">Course Modules</p>
+        <h1>Module Notes</h1>
+    </div>
+    {% if session.get('role') in ['instructor', 'admin'] %}
+        <a class="button" href="{{ url_for('add_note') }}">Add Notes</a>
+    {% endif %}
+</section>
+
+<section class="notes-list">
+    {% for note in notes %}
+        <article class="note-card">
+            <p class="eyebrow">{{ note.course_title }}</p>
+            <h2>{{ note.module_title }}</h2>
+            <p class="note-meta">
+                {% if note.instructor_name %}By {{ note.instructor_name }} | {% endif %}
+                {{ note.created_at }}
+            </p>
+            <p>{{ note.content }}</p>
+        </article>
+    {% else %}
+        <div class="empty-state">No notes are available yet.</div>
+    {% endfor %}
+</section>
+{% endblock %}
