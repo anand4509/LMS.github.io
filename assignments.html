@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Assignments{% endblock %}
+{% block content %}
+<section class="section-heading">
+    <div>
+        <p class="eyebrow">Assignment Upload</p>
+        <h1>Assignments</h1>
+    </div>
+</section>
+
+<section class="panel">
+    <form method="post" enctype="multipart/form-data" class="form">
+        <label for="course_id">Course</label>
+        <select id="course_id" name="course_id" required>
+            <option value="">Select course</option>
+            {% for course in courses %}
+                <option value="{{ course.id }}">{{ course.title }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="title">Assignment title</label>
+        <input id="title" name="title" type="text" required>
+
+        <label for="assignment_file">Upload file</label>
+        <input id="assignment_file" name="assignment_file" type="file" required>
+
+        <button type="submit">Upload Assignment</button>
+    </form>
+</section>
+
+<section class="table-panel">
+    <h2>Submitted Assignments</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Course</th>
+                {% if session.get('role') != 'student' %}<th>Student</th>{% endif %}
+                <th>File</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in submissions %}
+                <tr>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.course_title }}</td>
+                    {% if session.get('role') != 'student' %}<td>{{ item.student_name }}</td>{% endif %}
+                    <td><a href="{{ url_for('uploaded_file', filename=item.file_name) }}">Download</a></td>
+                    <td>{{ item.uploaded_at }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="5">No assignments uploaded yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}
